@@ -12,11 +12,7 @@ public class Parser {
         expr();
     }
 
-    private char peek () {
-        if (current < input.length)
-           return (char)input[current];
-       return '\0';
-    }
+
 
     private void match (char c) {
         if (c == peek()) {
