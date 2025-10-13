@@ -10,4 +10,22 @@ public class Parser {
         currentToken = scan.nextToken();
 
     } 
+
+    private void nextToken () {
+    currentToken = scan.nextToken();
+    }
+    
+    private void match(char t) {
+        if (currentToken == t) {
+            nextToken();
+        }else {
+            throw new Error("syntax error");
+        }
+    }
+
+
+
+
+
+
 }    
