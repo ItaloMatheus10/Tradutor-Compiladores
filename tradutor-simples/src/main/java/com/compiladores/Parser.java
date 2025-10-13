@@ -12,4 +12,18 @@ public class Parser {
         // aqui ainda ira o código
     }
 
+    private char peek () {
+        if (current < input.length)
+           return (char)input[current];
+       return '\0';
+    }
+
+    private void match (char c) {
+        if (c == peek()) {
+            current++;
+        } else {
+            throw new Error("syntax error");
+        }
+  }
+
 }
