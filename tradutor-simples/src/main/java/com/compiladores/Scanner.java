@@ -41,4 +41,14 @@ public class Scanner {
 
         return '\0';
     }
+
+    private String number() {
+        int start = current ;
+        while (Character.isDigit(peek())) {
+            advance();
+        }
+        
+        String n = new String(input, start, current-start)  ;
+        return n;
+  }
 }
