@@ -23,8 +23,37 @@ public class Parser {
         }
     }
 
+    void digit () {
+        if (Character.isDigit(currentToken)) {
+						System.out.println("push " + currentToken);
+            match(currentToken);
+        } else {
+           throw new Error("syntax error");
+        }
+    }
 
+    void oper () {
+        if (currentToken == '+') {
+            match('+');
+            digit();
+            System.out.println("add");
+            oper();
+        } else if (currentToken == '-') {
+            match('-');
+            digit();
+            System.out.println("sub");
+            oper();
+        }
+    }
 
+    void expr() {
+        digit();
+        oper();
+    }
+
+     public void parse () {
+        expr();
+    }
 
 
 
