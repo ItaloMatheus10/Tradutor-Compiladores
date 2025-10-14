@@ -7,6 +7,7 @@ public class Parser {
     
     private Scanner scan;
     private Token currentToken;
+    private StringBuilder output = new StringBuilder();
 
     public Parser(byte[] input) {
         scan = new Scanner(input);
@@ -17,6 +18,10 @@ public class Parser {
     private void nextToken () {
     currentToken = scan.nextToken();
     }
+
+    public void parse () {
+        letStatement();
+    }
     
     private void match(TokenType t) {
         if (currentToken.type == t) {
@@ -24,6 +29,11 @@ public class Parser {
         }else {
             throw new Error("syntax error");
         }
+    }
+
+    void expr() {
+        term ();
+        oper();
     }
 
     void number () {
@@ -56,22 +66,13 @@ public class Parser {
             throw new Error("syntax error");
     }
 
-    void expr() {
-        term ();
-        oper();
-    }
-
-    void letStatement () {
+   void letStatement() {
         match(TokenType.LET);
+        String id = currentToken.lexeme;
         match(TokenType.IDENT);
         match(TokenType.EQ);
         expr();
+        output.append("pop ").append(id).append("\n");
         match(TokenType.SEMICOLON);
     }
-
-     public void parse () {
-        letStatement();
-    }
-
-
 }    

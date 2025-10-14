@@ -19,7 +19,6 @@ public class Scanner {
         this.input = input;
     }
 
-
     private char peek () {
         if (current < input.length)
            return (char)input[current];
@@ -84,11 +83,11 @@ public class Scanner {
         public Token (TokenType type, String lexeme) {
             this.type = type;
             this.lexeme = lexeme;
-    }
+        }
 
-    public String toString() {
+        public String toString() {
         return "<"+ type +">" + lexeme + "</"+ type + ">";
-    }
+        }
     
     }
 
