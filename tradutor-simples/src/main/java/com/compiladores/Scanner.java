@@ -42,6 +42,14 @@ public class Scanner {
         return new Token(TokenType.NUMBER, n);
     }
 
+    private Token identifier() {
+        int start = current;
+        while (isAlphaNumeric(peek())) advance();
+    
+        String id = new String(input, start, current-start);
+        return new Token(TokenType.IDENT, id);
+    }
+
     
     public enum TokenType {
         PLUS,MINUS,
@@ -82,6 +90,11 @@ public class Scanner {
 
         skipWhitespace();
         char ch = peek();
+
+        if (isAlpha(ch)) {
+            return identifier();
+        }
+
         if (ch == '0') {
             advance();
             return new Token (TokenType.NUMBER, Character.toString(ch));
