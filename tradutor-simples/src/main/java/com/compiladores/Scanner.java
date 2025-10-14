@@ -58,8 +58,19 @@ public class Scanner {
     
     }
 
+    private void skipWhitespace() {
+        char ch = peek();
+        while (ch == ' ' || ch == '\r' || ch == '\t' || ch == '\n') {
+            advance();
+            ch = peek();
+        }
+    }
+
 
     public Token nextToken () {
+
+        skipWhitespace();
+        
         char ch = peek();
         if (ch == '0') {
             advance();
