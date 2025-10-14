@@ -34,10 +34,11 @@ public class Scanner {
 
     
     public enum TokenType {
-    PLUS,MINUS,
+        PLUS,MINUS,
 
-     // Literals.
-     NUMBER,
+        // Literals.
+        NUMBER,
+        IDENT,
 	
 		EOF
     }
