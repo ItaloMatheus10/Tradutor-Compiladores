@@ -70,7 +70,6 @@ public class Scanner {
     public Token nextToken () {
 
         skipWhitespace();
-        
         char ch = peek();
         if (ch == '0') {
             advance();
