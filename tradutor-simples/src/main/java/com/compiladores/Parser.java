@@ -75,4 +75,32 @@ public class Parser {
         output.append("pop ").append(id).append("\n");
         match(TokenType.SEMICOLON);
     }
+
+    void printStatement() {
+        match(TokenType.PRINT);
+        expr();
+        output.append("print\n");
+        match(TokenType.SEMICOLON);
+    }
+
+    void statement() {
+        if (currentToken.type == TokenType.PRINT) {
+            printStatement();
+        } else if (currentToken.type == TokenType.LET) {
+            letStatement();
+        } else {
+            throw new Error("syntax error");
+        }
+    }
+
+    void statements() {
+        while (currentToken.type != TokenType.EOF) {
+            statement();
+        }
+    }
+
+    public String output() {
+        return output.toString();
+    }
+
 }    

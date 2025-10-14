@@ -71,6 +71,8 @@ public class Scanner {
         IDENT,
 
         LET,
+        
+        PRINT,
 	
 		EOF
     }
