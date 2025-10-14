@@ -52,7 +52,7 @@ public class Scanner {
 
     
     public enum TokenType {
-        PLUS,MINUS,
+        PLUS,MINUS, EQ, SEMICOLON, 
 
         // Literals.
         NUMBER,
@@ -110,6 +110,13 @@ public class Scanner {
                     return new Token (TokenType.MINUS,"-");
                 case '\0':
                     return new Token (TokenType.EOF,"EOF");
+                case '=':
+	                advance();
+	                return new Token (TokenType.EQ,"=");
+                case ';':
+                    advance();
+                return new Token (TokenType.SEMICOLON,";");
+                
                 default:
                      throw new Error("lexical error at " + ch);
         }
