@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
-
-
 class Command {
 
     public enum Type {
@@ -17,85 +15,87 @@ class Command {
         PUSH,
         POP,
         PRINT
-        
-        ;
     }
 
     public Command.Type type;
-    public String arg = "" ;
+    public String arg = "";
 
-    public Command (String[] command) {
-
+    public Command(String[] command) {
         type = Command.Type.valueOf(command[0].toUpperCase());
         if (command.length > 1) {
             arg = command[1];
         }
-   
     }
 
-    public String toString () {
+    public String toString() {
         return type.name() + " " + arg;
     }
-    
 }
 
 public class Interpretador {
 
     List<String[]> commands;
     Stack<Integer> stack = new Stack<>();
-    Map<String,Integer> variables = new HashMap<>();
+    Map<String, Integer> variables = new HashMap<>();
 
-    Interpretador (String input) {
-        final String eol = System.getProperty("line.separator");
-        var output = input.split(eol);
+    Interpretador(String input) {
+        // Aceita tanto \n quanto \r\n
+        String[] output = input.split("\\r?\\n");
         commands = Arrays.stream(output)
-        .map(String::strip)
-        .filter(  (s) ->  s.indexOf("//") != 0 && s != "")
-        .map ( (s) ->s.split(" ")  )
-        .collect(Collectors.toList());
-
+            .map(String::strip)
+            .filter(s -> !s.isEmpty())
+            .filter(s -> !s.startsWith("//"))
+            .map(s -> s.split(" "))
+            .collect(Collectors.toList());
     }
 
-    public boolean hasMoreCommands () {
-        return commands.size() != 0;
+    public boolean hasMoreCommands() {
+        return !commands.isEmpty();
     }
 
-    public Command nextCommand () {
+    public Command nextCommand() {
         return new Command(commands.remove(0));
     }
 
-    public void run () {
+    public void run() {
         while (hasMoreCommands()) {
-            var command = nextCommand();
+            Command command = nextCommand();
             switch (command.type) {
-                case ADD:
-                    var arg2 = stack.pop();
-                    var arg1 = stack.pop();
-                    stack.push (arg1+arg2);
+                case ADD: {
+                    if (stack.size() < 2) throw new RuntimeException("Stack underflow on ADD");
+                    int arg2 = stack.pop();
+                    int arg1 = stack.pop();
+                    stack.push(arg1 + arg2);
                     break;
-                case SUB:
-                    arg2 = stack.pop();
-                    arg1 = stack.pop();
-                    stack.push (arg1-arg2);
+                }
+                case SUB: {
+                    if (stack.size() < 2) throw new RuntimeException("Stack underflow on SUB");
+                    int arg2 = stack.pop();
+                    int arg1 = stack.pop();
+                    stack.push(arg1 - arg2);
                     break;
-                case PUSH:
-                    var value = variables.get(command.arg);
+                }
+                case PUSH: {
+                    Integer value = variables.get(command.arg);
                     if (value != null) {
                         stack.push(value);
                     } else {
-                        stack.push (Integer.parseInt(command.arg));     
+                        stack.push(Integer.parseInt(command.arg));
                     }
                     break;
-                case POP:
-                    value = stack.pop();
-                    variables.put(command.arg, value);     
+                }
+                case POP: {
+                    if (stack.isEmpty()) throw new RuntimeException("Stack underflow on POP");
+                    int value = stack.pop();
+                    variables.put(command.arg, value);
                     break;
-                case PRINT:
-                    var arg = stack.pop();
+                }
+                case PRINT: {
+                    if (stack.isEmpty()) throw new RuntimeException("Stack underflow on PRINT");
+                    int arg = stack.pop();
                     System.out.println(arg);
                     break;
-                
-
+                }
             }
         }
     }
